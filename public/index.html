@@ -1,14 +1,14 @@
 <!doctype html>
 <html>
-	<head>
-		<title>Chart.js : Github Summary</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-		<style type="text/css">
+  <head>
+    <title>Chart.js : Github Summary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
         body {
             padding-top: 20px;
             padding-bottom: 40px;
-        	color: #5a5a5a;
+            color: #5a5a5a;
         }
         .container-narrow {
             margin: 0 auto;
@@ -18,46 +18,6 @@
     .container-narrow > hr {
         margin: 30px 0;
     }
-    .navbar-wrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      margin-top: 20px;
-      margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
-    }
-    .navbar-wrapper .navbar {
-
-    }
-
-    /* Remove border and change up box shadow for more contrast */
-    .navbar .navbar-inner {
-      border: 0;
-      -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-         -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-              box-shadow: 0 2px 10px rgba(0,0,0,.25);
-    }
-
-    /* Downsize the brand/project name a bit */
-    .navbar .brand {
-      padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
-      font-size: 16px;
-      font-weight: bold;
-      text-shadow: 0 -1px 0 rgba(0,0,0,.5);
-    }
-
-    /* Navbar links: increase padding for taller navbar */
-    .navbar .nav > li > a {
-      padding: 15px 20px;
-    }
-
-    /* Offset the responsive button for proper vertical alignment */
-    .navbar .btn-navbar {
-      margin-top: 10px;
-    }
-
-
 
     /* CUSTOMIZE THE CAROUSEL
     -------------------------------------------------- */
@@ -76,8 +36,20 @@
       height: 80px;
       margin-top: 0;
       font-size: 120px;
-      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+      text-shadow: 0 5px 5px rgba(5,10,0,.4);
       background-color: transparent;
+      color: rgb(22, 17, 17);
+      border: 1;
+      z-index: 10;
+    }
+
+    .carousel-control:hover {
+      height: 80px;
+      margin-top: 0;
+      font-size: 120px;
+      text-shadow: 0 5px 5px rgba(5,10,0,.4);
+      background-color: transparent;
+      color: rgb(22, 17, 17);
       border: 1;
       z-index: 10;
     }
@@ -89,10 +61,11 @@
     .carousel-caption {
       background-color: transparent;
       position: static;
-      max-width: 550px;
+      max-width: 700px;
       padding: 0 150px;
       margin-top: 100px;
     }
+
     .carousel-caption h1,
     .carousel-caption .lead {
       margin: 100;
@@ -102,39 +75,55 @@
     }
     
     </style>
-	</head>
-	<body>
-		<h1>Chart.js : Github Summary using Github API</h1>
-		<div id="myCarousel" class="carousel slide">
-			<div class="carousel-inner">
-        		<div class="item active">
-        			<div class="container">
-            			<div class="carousel-caption">
-			              <h1>Contribution by Contributors.</h1>
-			              <canvas id="issuesChart" width="600" height="400"></canvas>      
-			            </div>
-			        </div>
-			    </div>
-			    <div class="item">
-		          	<div class="container">
-		            	<div class="carousel-caption">
-			              <h1>Contributors by Region.</h1>
-			              <canvas id="issuesChart" width="300" height="300"></canvas>
-		            	</div>
-		        	</div>
-        		</div>
-			</div>
-		</div>
-		
-		 
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-      	<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
-		
+  </head>
+  <body>
+    <h1 align="center">ChartGit : Chart.js summary using Github API</h1>
+    <div id="myCarousel" class="carousel slide">
+      <div class="carousel-inner">
+            <div class="item active">
+              <div class="container">
+                  <div class="carousel-caption">
+                    <h2>Contributions and their Followers.</h2>
+                    <canvas id="contributorsChart" width="600" height="400"></canvas>      
+                  </div>                  
+              </div>
+          </div>
+          <div class="item">
+                <div class="container">
+                  <div class="carousel-caption">
+                    <h2>Stargazers, Subscribers, Contributors and Forks.</h2>
+                    <canvas id="summaryChart" width="600" height="400"></canvas>
+                  </div>
+              </div>
+          </div>
+          <div class="item">
+                <div class="container">
+                  <div class="carousel-caption">
+                    <h2>Repos.</h2>
+                    <canvas id="reposChart" width="600" height="400"></canvas>
+                  </div>
+              </div>
+          </div>
+          <div class="item">
+                <div class="container">
+                  <div class="carousel-caption">
+                    <h2>Activity.</h2>
+                  </div>
+                  <canvas id="activityChart" width="1000" height="500"></canvas>
+              </div>
+          </div>
+      </div>
+    </div>
+    
+     
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    
 
-		<script src="js/Chart.js"></script>
-		<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/RestAPI.js"></script>
-	    <script src="js/GitChart.js"></script>
-	</body>
+    <script src="js/Chart.js"></script>
+    <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/RestAPI.js"></script>
+      <script src="js/GitChart.js"></script>
+  </body>
 </html>

@@ -1,33 +1,22 @@
-var colors = ['rgba(96,169,23,.5)','rgba(0,171,169,.5)','rgba(27,161,226,.5)' ,'rgba(240,163,10,.5)','rgba(227,200,0,.5)','rgba(1,67,157,.5)','rgba(239,149,0,.5)','rgba(178,0,129,.5)'];
-
-/* set up data - copied from Excel*/
-var keys = [
-	{key: 'user', caption: 'User', grouping: false},
-	{key: 'status', caption: 'Status', grouping: true},
-	{key: 'association', caption: 'Association', grouping: true},
-	{key: 'relationship', caption: 'In a relationship', grouping: true},
-	{key: 'attending', caption: 'Attending', grouping: true},
-	{key: 'rsvp', caption: 'Sent RSVP', grouping: true},
-	{key: 'oot', caption: 'Out of towner', grouping: true},
-	{key: 'hasp1', caption: 'Has a plus-1', grouping: true},
-	{key: 'isp1', caption: 'Is a plus-1', grouping: true},
-	{key: 'meal', caption: 'Meal choice', grouping: true}
-];
-
-var data1 = [
-	{value : 'maxgranier', color : 'rgba(96,169,23,.5)'},
-	{value : 'Wikunia', color : 'rgba(0,171,169,.5)'},
-	{value : 'plus-', color : 'rgba(27,161,226,.5)'},
-	{value : 'yDgunz', color : 'rgba(240,163,10,.5)'},
-	{value : 'ericrange', color : 'rgba(1,67,237,.5)'}
-];
-
-var data = [
-	{value : 10, color : 'rgba(96,169,23,.5)'},
-	{value : 20, color : 'rgba(0,171,169,.5)'},
-	{value : 1, color : 'rgba(27,161,226,.5)'},
-	{value : 40, color : 'rgba(240,163,10,.5)'},
-	{value : 20, color : 'rgba(227,200,0,.5)'}
+var colors = 
+[
+"#632F00",
+"#B01E00",
+"#C1004F",
+"#7200AC",
+"#4617B4",
+"#006AC1",
+"#00C13F",
+"#FF981D",
+"#FF2E12",
+"#FF1D77",
+"#AA40FF",
+"#1FAEFF",
+"#56C5FF",
+"#00D8CC",
+"#91D100",
+"#E1B700",
+"#FF76BC"
 ];
 
 init();
@@ -37,70 +26,177 @@ function init() {
 	var url = "https://api.github.com/repos/nnnick/chart.js/contributors";
 	var responseData = API.Get(url);
     
-	var context = document.getElementById("issuesChart").getContext("2d");
-	var options = {labelFontColor: '#000', labelFontSize: "16"};
+	var context = document.getElementById("contributorsChart").getContext("2d");
+	var options = 
+	{
+		tooltips: {
+            fontSize: '75%'
+        }
+    };
+
 	new Chart(context).Bar(getContributors(), options);
+	
+	var context = document.getElementById("summaryChart").getContext("2d");
+	
+	new Chart(context).PolarArea(getSummaryData(), options);
+	//$('#chart' + "summaryChart" + '_label').text("hoila");
+
+	var context = document.getElementById("reposChart").getContext("2d");	
 	//var issuesChart = new Chart(ctx).Pie(data,options);
+
+	var context = document.getElementById("activityChart").getContext("2d");
+	new Chart(context).Line(getActivityData(), {showLabels : false});
 }
 
-function create_chart(chart_id, grouping_key_id) {
-	new Chart($('#chart' + chart_id + '_canvas')[0].getContext('2d')).Pie(get_chart_data(keys[grouping_key_id].key),{labelFontColor: '#000', labelFontSize: "16"});
-	$('#chart' + chart_id + '_label').text(keys[grouping_key_id].caption);
-}
-
+/*
+Get Contributions and their followers.
+*/
 function getContributors(){
 	var url = "https://api.github.com/repos/nnnick/chart.js/contributors";
-	var response = API.Get(url);
+	
 	var resultData = 
 	{
 		labels : [],
 		datasets : []
 	};
 
-	var jsonData = JSON.parse(response);
-	var values = [];
+	var jsonData = getJsonData(url);
 
-	resultData.datasets.push(
-		{
-			fillColor: 'rgba(96,169,23,.5)', //colors[i%colors.length], 
-			strokeColor: 'rgba(0,171,169,.5)' //colors[i%colors.length]
-		}
-	);
+	var values = [];
+	var followers = [];
 
 	for (var i = 0; i < jsonData.length; i++) {
 		resultData.labels.push(jsonData[i].login);
+
+		var url = "https://api.github.com/users/" + jsonData[i].login + "/followers";
+		var followersJsonData = getJsonData(url);
+
+		followers.push(followersJsonData.length);
 		values.push(jsonData[i].contributions);
 	};
 
-	resultData.datasets[0].data = values;
-	console.log(resultData);
+	resultData.datasets.push(
+		{
+			fillColor: colors[5],
+			strokeColor: colors[5],
+			data : values
+		},
+		{
+			fillColor: colors[6],
+			strokeColor: colors[6],
+			data : followers
+		}
+	);
+
 	return resultData;
 }
 
-function get_chart_data(grouping) {
-	var chart_data = [];
-	var counts = {};
-	for (var i = 0; i < data.length; i++) {
-		if (!counts[data[i][grouping]])
-			counts[data[i][grouping]] = 1;
-		else
-			counts[data[i][grouping]]++;
-	}
-	for (var i = 0; i < Object.keys(counts).length; i++) {
-		Object.keys(counts)[i];
-		counts[Object.keys(counts)[i]];
-		chart_data.push({value: counts[Object.keys(counts)[i]], color: colors[i%colors.length], label: Object.keys(counts)[i]});
-	}
-	return chart_data;
+/*
+Get Summary data : Stargazers, Subscribers, Contributors and Forks.
+*/
+function getSummaryData(){
+	var resultData = [];
+
+	var url = "https://api.github.com/repos/nnnick/Chart.js/stargazers";
+	var jsonData = getJsonData(url);
+	var startGazersCount = jsonData.length;
+
+	resultData.push({value: startGazersCount, color: colors[4], label: "Stargazers"});
+
+	var url = "https://api.github.com/repos/nnnick/Chart.js/subscribers";
+	var jsonData = getJsonData(url);
+	var subscribersCount = jsonData.length;
+
+	resultData.push({value: subscribersCount, color: colors[7], label: "Subscribers"});
+
+	var url = "https://api.github.com/repos/nnnick/chart.js/contributors";
+	var jsonData = getJsonData(url);
+	var contributorsCount = jsonData.length;
+
+	resultData.push({value: contributorsCount, color: colors[9], label: "Contributors"});
+
+	var url ="https://api.github.com/repos/nnnick/chart.js/forks";
+	var jsonData = getJsonData(url);
+	var forkersCount = jsonData.length;
+
+	resultData.push({value: forkersCount, color: colors[1], label: "Forks"});
+
+	return resultData;
 }
 
-function get_next_grouping_key_index(index) {
-	if (keys[index].grouping) {
-		return index;
-	} else {
-		return get_next_grouping_key_index((index+1)%keys.length);
-	}
+/*
+Get data for Activity Chart : Contributions for previous weeks.
+*/
+function getActivityData(){
+	var url = "https://api.github.com/repos/nnnick/chart.js/stats/contributors";
+
+	var resultData = 
+	{
+		labels : [],
+		datasets : []
+	};
+
+	var jsonData = getJsonData(url);
+	var weeks = [];
+	var added = [];
+	var deleted = [];
+	var commited = [];
+
+	for (var i = 0; i < jsonData.length; i++) {
+		for (var j = 0; j < jsonData[i].weeks.length; j++) {
+			var w = (new Date(jsonData[i].weeks[j].w * 1000)).toUTCString();
+			weeks.push(w);
+			added.push(jsonData[i].weeks[j].a);
+			deleted.push(jsonData[i].weeks[j].d);
+			commited.push(jsonData[i].weeks[j].c);
+		};
+	};
+
+	resultData.labels = weeks;
+	resultData.datasets.push(
+	{
+		fillColor : colors[5],
+		strokeColor : colors[5],
+		pointColor : colors[5],
+		pointStrokeColor : colors[5],
+		data : added
+	});
+
+	resultData.datasets.push(
+	{
+		fillColor : colors[8],
+		strokeColor : colors[8],
+		pointColor : colors[8],
+		pointStrokeColor : colors[8],
+		data : deleted
+	});
+
+	resultData.datasets.push(
+	{
+		fillColor : colors[15],
+		strokeColor : colors[15],
+		pointColor : colors[15],
+		pointStrokeColor : colors[15],
+		data : commited
+	});
+
+	return resultData;
 }
 
-$('#guests_table').append('<tr>' + $.map(keys, function(n) { return '<th>' + n.caption + '</th>'; }).join('') + '</tr>');
-$('#guests_table').append($.map(data, function(data) { return '<tr>' + $.map(keys, function(key) { return '<td>' + data[key.key] + '</td>'; }).join('') + '</tr>'; }).join(''));
+function getReposData(){
+	var url = "";
+}
+
+/*
+Get JSON data for provided url.
+*/
+function getJsonData(url){
+	var response = API.Get(url);
+	if(response == "ERROR"){
+		alert("The Maximum number of requests allowed for this hour by Github API has exceeded.\nPlease try after sometime.");
+	}else{
+		var jsonData = JSON.parse(response);
+		return jsonData;
+	}
+	return null;
+}
