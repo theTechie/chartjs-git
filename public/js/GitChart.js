@@ -16,7 +16,9 @@ var colors =
 "#00D8CC",
 "#91D100",
 "#E1B700",
-"#FF76BC"
+"#FF76BC",
+"#CC0000",
+"#33FF33"
 ];
 
 init();
@@ -42,7 +44,7 @@ function init() {
 	//$('#chart' + "summaryChart" + '_label').text("hoila");
 
 	var context = document.getElementById("reposChart").getContext("2d");	
-	//var issuesChart = new Chart(ctx).Pie(data,options);
+	new Chart(context).Pie(getIssueData(),options);
 
 	var context = document.getElementById("activityChart").getContext("2d");
 	new Chart(context).Line(getActivityData(), {showLabels : false});
@@ -60,7 +62,7 @@ function getContributors(){
 		datasets : []
 	};
 
-	var jsonData = getJsonData(url);
+	var jsonData = getJsonData(url, false);
 
 	var values = [];
 	var followers = [];
@@ -69,7 +71,7 @@ function getContributors(){
 		resultData.labels.push(jsonData[i].login);
 
 		var url = "https://api.github.com/users/" + jsonData[i].login + "/followers";
-		var followersJsonData = getJsonData(url);
+		var followersJsonData = getJsonData(url, false);
 
 		followers.push(followersJsonData.length);
 		values.push(jsonData[i].contributions);
@@ -183,6 +185,41 @@ function getActivityData(){
 	return resultData;
 }
 
+function getIssueData(){
+	var resultData = [];
+
+	var url = "https://api.github.com/repos/nnnick/chart.js/issues";
+
+	var openCount = 0;
+	var closeCount = 0;
+	var nextPage = true;
+	var page = 1;
+
+	while(nextPage){
+		var openData = getJsonData(url + "?page=" + page +"&state=open", true);
+		if(openData.length === 0)
+			nextPage = false;
+		openCount += openData.length;	
+		page += 1;
+	}
+	
+	nextPage = true;
+	page = 1;
+
+	while(nextPage){
+		var closeData = getJsonData(url + "?page=" + page + "&state=closed", true);
+		if(closeData.length === 0)
+			nextPage = false;
+		closeCount += closeData.length;
+		page += 1;
+	}
+
+	resultData.push({value: openCount, color: colors[18], label: "Open"});
+	resultData.push({value: closeCount, color: colors[17], label: "Closed"});
+
+	return resultData;
+}
+
 function getReposData(){
 	var url = "";
 }
@@ -190,8 +227,8 @@ function getReposData(){
 /*
 Get JSON data for provided url.
 */
-function getJsonData(url){
-	var response = API.Get(url);
+function getJsonData(url, withParams){
+	var response = API.Get(url, withParams);
 	if(response == "ERROR"){
 		alert("The Maximum number of requests allowed for this hour by Github API has exceeded.\nPlease try after sometime.");
 	}else{
