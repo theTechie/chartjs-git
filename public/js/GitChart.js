@@ -31,20 +31,18 @@ function init() {
 	var context = document.getElementById("contributorsChart").getContext("2d");
 	var options = 
 	{
-		tooltips: {
-            fontSize: '75%'
-        }
+		
     };
 
 	new Chart(context).Bar(getContributors(), options);
 	
 	var context = document.getElementById("summaryChart").getContext("2d");
 	
-	new Chart(context).PolarArea(getSummaryData(), options);
+	new Chart(context).Doughnut(getSummaryData(), options);
 	//$('#chart' + "summaryChart" + '_label').text("hoila");
 
 	var context = document.getElementById("reposChart").getContext("2d");	
-	new Chart(context).Pie(getIssueData(),options);
+	new Chart(context).Pie(getIssueData(), options);
 
 	var context = document.getElementById("activityChart").getContext("2d");
 	new Chart(context).Line(getActivityData(), {showLabels : false});
@@ -64,7 +62,7 @@ function getContributors(){
 
 	var jsonData = getJsonData(url, false);
 
-	var values = [];
+	var contributors = [];
 	var followers = [];
 
 	for (var i = 0; i < jsonData.length; i++) {
@@ -74,14 +72,14 @@ function getContributors(){
 		var followersJsonData = getJsonData(url, false);
 
 		followers.push(followersJsonData.length);
-		values.push(jsonData[i].contributions);
+		contributors.push(jsonData[i].contributions);
 	};
 
 	resultData.datasets.push(
 		{
 			fillColor: colors[5],
 			strokeColor: colors[5],
-			data : values
+			data : contributors
 		},
 		{
 			fillColor: colors[6],
