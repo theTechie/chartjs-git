@@ -23,6 +23,9 @@ var colors =
 
 init();
 
+/*
+Initiate charts.
+*/
 function init() {
 	//Get the context of the canvas element we want to select
 	var url = "https://api.github.com/repos/nnnick/chart.js/contributors";
@@ -77,13 +80,13 @@ function getContributors(){
 
 	resultData.datasets.push(
 		{
-			fillColor: colors[5],
-			strokeColor: colors[5],
+			fillColor: colors[6],
+			strokeColor: colors[6],
 			data : contributors
 		},
 		{
-			fillColor: colors[6],
-			strokeColor: colors[6],
+			fillColor: colors[5],
+			strokeColor: colors[5],
 			data : followers
 		}
 	);
@@ -99,9 +102,9 @@ function getSummaryData(){
 
 	var url = "https://api.github.com/repos/nnnick/Chart.js/stargazers";
 	var jsonData = getJsonData(url);
-	var startGazersCount = jsonData.length;
+	var starGazers = jsonData.length;
 
-	resultData.push({value: startGazersCount, color: colors[4], label: "Stargazers"});
+	resultData.push({value: starGazers, color: colors[4], label: "Stargazers"});
 
 	var url = "https://api.github.com/repos/nnnick/Chart.js/subscribers";
 	var jsonData = getJsonData(url);
@@ -142,9 +145,12 @@ function getActivityData(){
 	var deleted = [];
 	var commited = [];
 
-	for (var i = 0; i < jsonData.length; i++) {
-		for (var j = 0; j < jsonData[i].weeks.length; j++) {
-			var w = (new Date(jsonData[i].weeks[j].w * 1000)).toUTCString();
+	var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+	for (var j = 0; j < jsonData[0].weeks.length; j++) {
+			for (var i = 0; i < jsonData.length; i++) {
+			var date = new Date(jsonData[i].weeks[j].w * 1000);
+			var w = date.getDate() + ', ' +  months[date.getMonth()] + ', ' + date.getFullYear() + ', ' + date.getHours() + ':' + date.getMinutes();
 			weeks.push(w);
 			added.push(jsonData[i].weeks[j].a);
 			deleted.push(jsonData[i].weeks[j].d);
@@ -155,7 +161,7 @@ function getActivityData(){
 	resultData.labels = weeks;
 	resultData.datasets.push(
 	{
-		fillColor : colors[5],
+		fillColor : "#FFFFFF", //colors[5],
 		strokeColor : colors[5],
 		pointColor : colors[5],
 		pointStrokeColor : colors[5],
@@ -164,7 +170,7 @@ function getActivityData(){
 
 	resultData.datasets.push(
 	{
-		fillColor : colors[8],
+		fillColor : "#FFFFFF", //colors[8],
 		strokeColor : colors[8],
 		pointColor : colors[8],
 		pointStrokeColor : colors[8],
@@ -173,7 +179,7 @@ function getActivityData(){
 
 	resultData.datasets.push(
 	{
-		fillColor : colors[15],
+		fillColor : "#FFFFFF", //colors[15],
 		strokeColor : colors[15],
 		pointColor : colors[15],
 		pointStrokeColor : colors[15],
@@ -183,6 +189,9 @@ function getActivityData(){
 	return resultData;
 }
 
+/*
+Get Issues count.
+*/
 function getIssueData(){
 	var resultData = [];
 
@@ -212,8 +221,8 @@ function getIssueData(){
 		page += 1;
 	}
 
-	resultData.push({value: openCount, color: colors[18], label: "Open"});
-	resultData.push({value: closeCount, color: colors[17], label: "Closed"});
+	resultData.push({value: openCount, color: colors[17], label: "Open : " + openCount});
+	resultData.push({value: closeCount, color: colors[18], label: "Closed : " + closeCount});
 
 	return resultData;
 }
