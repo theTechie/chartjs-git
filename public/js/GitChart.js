@@ -27,6 +27,7 @@ init();
 Initiate charts.
 */
 function init() {
+
 	//Get the context of the canvas element we want to select
 	var url = "https://api.github.com/repos/nnnick/chart.js/contributors";
 	var responseData = API.Get(url);
@@ -49,6 +50,14 @@ function init() {
 
 	var context = document.getElementById("activityChart").getContext("2d");
 	new Chart(context).Line(getActivityData(), {showLabels : false});
+
+}
+
+/*
+Hide Loading message onBodyLoad.
+*/
+function loading(){
+	document.getElementById("loading").style.visibility = "hidden";
 }
 
 /*
