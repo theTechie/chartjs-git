@@ -77,7 +77,7 @@ function getContributors(){
 	var contributors = [];
 	var followers = [];
 
-	for (var i = 0; i < jsonData.length; i++) {
+	/*for (var i = 0; i < jsonData.length; i++) {
 		resultData.labels.push(jsonData[i].login);
 
 		var url = "https://api.github.com/users/" + jsonData[i].login + "/followers";
@@ -85,18 +85,27 @@ function getContributors(){
 
 		followers.push(followersJsonData.length);
 		contributors.push(jsonData[i].contributions);
-	};
+	};*/
+
+	resultData.labels = 
+	[
+		"Arduino",
+		"Node.js",
+		"Novels",
+		"Robotics",
+		"Lawn Tennis"
+	];
 
 	resultData.datasets.push(
 		{
 			fillColor: colors[6],
 			strokeColor: colors[6],
-			data : contributors
+			data : [20, 2, 2, 10, 8]
 		},
 		{
 			fillColor: colors[5],
 			strokeColor: colors[5],
-			data : followers
+			data : [2, 4, 6, 3, 10]
 		}
 	);
 
@@ -110,26 +119,26 @@ function getSummaryData(){
 	var resultData = [];
 
 	var url = "https://api.github.com/repos/nnnick/Chart.js/stargazers";
-	var jsonData = getJsonData(url);
-	var starGazers = jsonData.length;
+	//var jsonData = getJsonData(url);
+	var starGazers = 40 ; //jsonData.length;
 
 	resultData.push({value: starGazers, color: colors[4], label: "Stargazers"});
 
 	var url = "https://api.github.com/repos/nnnick/Chart.js/subscribers";
-	var jsonData = getJsonData(url);
-	var subscribersCount = jsonData.length;
+	//var jsonData = getJsonData(url);
+	var subscribersCount = 80; //jsonData.length;
 
 	resultData.push({value: subscribersCount, color: colors[7], label: "Subscribers"});
 
 	var url = "https://api.github.com/repos/nnnick/chart.js/contributors";
-	var jsonData = getJsonData(url);
-	var contributorsCount = jsonData.length;
+	//var jsonData = getJsonData(url);
+	var contributorsCount = 60; //jsonData.length;
 
 	resultData.push({value: contributorsCount, color: colors[9], label: "Contributors"});
 
 	var url ="https://api.github.com/repos/nnnick/chart.js/forks";
-	var jsonData = getJsonData(url);
-	var forkersCount = jsonData.length;
+	//var jsonData = getJsonData(url);
+	var forkersCount = 40; //jsonData.length;
 
 	resultData.push({value: forkersCount, color: colors[1], label: "Forks"});
 
@@ -148,7 +157,7 @@ function getActivityData(){
 		datasets : []
 	};
 
-	var jsonData = getJsonData(url);
+	/*var jsonData = getJsonData(url);
 	var weeks = [];
 	var added = [];
 	var deleted = [];
@@ -165,12 +174,33 @@ function getActivityData(){
 			deleted.push(jsonData[i].weeks[j].d);
 			commited.push(jsonData[i].weeks[j].c);
 		};
-	};
+	};*/
 
-	resultData.labels = weeks;
+	var added = [0, 0, 0, 8, 12, 0, 0, 0, 1, 0, 0, 0, 8, 4, 0, 0];
+	var deleted = [0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 1, 2, 0, 0];
+	var commited = [0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 2, 10, 0, 0];
+
+	resultData.labels = 
+	[
+		"Jan 10, 2013", 
+		"Jan 15, 2013", 
+		"Jan 20, 2013", 
+		"Feb 20, 2013", 
+		"Feb 28, 2013", 
+		"Mar 02, 2013", 
+		"Mar 16, 2013", 
+		"Mar 28, 2013", 
+		"Apr 12, 2013", 
+		"Apr 19, 2013", 
+		"May 13, 2013", 
+		"May 19, 2013", 
+		"Jun 06, 2013", 
+		"Jun 13, 2013", 
+		"Jul 08, 2013", 
+		"Jul 10, 2013"];
 	resultData.datasets.push(
 	{
-		fillColor : "#FFFFFF", //colors[5],
+		fillColor : colors[5],
 		strokeColor : colors[5],
 		pointColor : colors[5],
 		pointStrokeColor : colors[5],
@@ -179,7 +209,7 @@ function getActivityData(){
 
 	resultData.datasets.push(
 	{
-		fillColor : "#FFFFFF", //colors[8],
+		fillColor : colors[8],
 		strokeColor : colors[8],
 		pointColor : colors[8],
 		pointStrokeColor : colors[8],
@@ -188,7 +218,7 @@ function getActivityData(){
 
 	resultData.datasets.push(
 	{
-		fillColor : "#FFFFFF", //colors[15],
+		fillColor : colors[15],
 		strokeColor : colors[15],
 		pointColor : colors[15],
 		pointStrokeColor : colors[15],
@@ -211,7 +241,7 @@ function getIssueData(){
 	var nextPage = true;
 	var page = 1;
 
-	while(nextPage){
+	/*while(nextPage){
 		var openData = getJsonData(url + "?page=" + page +"&state=open", true);
 		if(openData.length === 0)
 			nextPage = false;
@@ -228,10 +258,10 @@ function getIssueData(){
 			nextPage = false;
 		closeCount += closeData.length;
 		page += 1;
-	}
+	}*/
 
-	resultData.push({value: openCount, color: colors[17], label: "Open : " + openCount});
-	resultData.push({value: closeCount, color: colors[18], label: "Closed : " + closeCount});
+	resultData.push({value: 10, color: colors[17], label: "Yet to visit : " + 10});
+	resultData.push({value: 2, color: colors[18], label: "Visited : " + 2});
 
 	return resultData;
 }

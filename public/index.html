@@ -1,7 +1,9 @@
 <!doctype html>
 <html>
   <head>
-    <title>GitChart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <style type="text/css">
@@ -12,67 +14,19 @@
         }
         .container-narrow {
             margin: 0 auto;
-            max-width: 700px;
+            max-width: 300px;
         }
-
-    .container-narrow > hr {
-        margin: 30px 0;
-    }
-
-    /* CUSTOMIZE THE CAROUSEL
-    -------------------------------------------------- */
-
-    /* Carousel base class */
-    .carousel {
-      margin-bottom: 60px;
-    }
-
-    .carousel .container {
-      position: relative;
-      z-index: 9;
-    }
-
-    .carousel-control {
-      height: 80px;
-      margin-top: 0;
-      font-size: 120px;
-      text-shadow: 0 5px 5px rgba(5,10,0,.4);
-      background-color: transparent;
-      color: rgb(22, 17, 17);
-      border: 1;
-      z-index: 10;
-    }
-
-    .carousel-control:hover {
-      height: 80px;
-      margin-top: 0;
-      font-size: 120px;
-      text-shadow: 0 5px 5px rgba(5,10,0,.4);
-      background-color: transparent;
-      color: rgb(22, 17, 17);
-      border: 1;
-      z-index: 10;
-    }
-
-    .carousel .item {
-      height: 800px;
-    }
-
-    .carousel-caption {
-      background-color: transparent;
-      position: static;
-      max-width: 700px;
-      padding: 0 150px;
-      margin-top: 60px;
-    }
-
-    .carousel-caption h1,
-    .carousel-caption .lead {
-      margin: 100;
-      line-height: 1.25;
-      color: #0000;
-      text-shadow: 0 1px 1px rgba(0,0,0,.4);
-    }
+/* Large desktop */
+@media (min-width: 1200px) { ... }
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { ... }
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { ... }
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) { ... }
     
     #loading {
       width: 100%;
@@ -90,7 +44,7 @@
     #loading-image {
       position: absolute;
       top: 120px;
-      left: 320px;
+      left: 350px;
       z-index: 100;
     }
 
@@ -100,54 +54,45 @@
     <div id="loading">
       <img id="loading-image" src="images/loading_gif.gif" alt="Loading..." />
     </div>
-    <h1 align="center">GitChart : Chart.js summary using Github API</h1>
-    <div id="myCarousel" class="carousel slide">
-      <div class="carousel-inner">
-            <div class="item active">
-              <div class="container">
-                  <div class="carousel-caption">
-                    <h2><font color="#00C13F">Contributions</font> and their <font color="#006AC1">Followers.</font></h2>
-                    <canvas id="contributorsChart" width="600" height="400"></canvas>      
-                  </div>                  
-              </div>
-          </div>
-          <div class="item">
-                <div class="container">
-                  <div class="carousel-caption">
-                    <h2><font color="#4617B4">Stargazers</font>, <font color="#FF981D">Subscribers</font>, <font color="#FF1D77">Contributors</font> and <font color="#B01E00">Forks.</font></h2>
-                    <canvas id="summaryChart" width="600" height="400"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="item">
-                <div class="container">
-                  <div class="carousel-caption">
-                    <h2>Issues.</h2>
-                    <canvas id="reposChart" width="600" height="400"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="item">
-                <div class="container">
-                  <div class="carousel-caption">
-                    <h2>Activity: <font color="#006AC1">Added</font>, <font color="#FF2E12">Deleted</font> and <font color="#E1B700">Commited.</font></h2>
-                  </div>
-                  <canvas id="activityChart" width="1000" height="500"></canvas>
-              </div>
-          </div>
-      </div>
-    </div>
-    
+
+    <h1 align="center">Personal Dashboard</h1>
+
+    <table>
      
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
-    
-    
+    <tr>
+      <td width="200" height="80">
+        <div align="center">
+              <h2>Time Invested : <font color="#00C13F">2012</font> and <font color="#006AC1">2013.</font></h2>
+              <canvas id="contributorsChart" width="500" height="300"></canvas>      
+            </div>                  
+      </td>
+      <td width="200" height="80">
+        <div align="center">
+            <h2>Time Spent : <font color="#4617B4">Commuting</font>, <font color="#FF981D">Family</font>, <font color="#FF1D77">Friends</font> and <font color="#B01E00">Colleagues.</font></h2>
+            <canvas id="summaryChart" width="300" height="300"></canvas>
+        </div>
+        
+      </td>
+    </tr>
+    <tr>
+      <td width="600" height="80">
+        <div align="center">
+            <h2>Global Footprint.</h2>
+            <canvas id="reposChart" width="300" height="300"></canvas>
+          </div>
+      </td>
+      <td width="600" height="80">
+        <div align="center">
+            <h2>Github Activity: <font color="#006AC1">Added</font>, <font color="#FF2E12">Deleted</font> and <font color="#E1B700">Commited.</font></h2>
+          </div>
+          <canvas id="activityChart" width="600" height="300"></canvas>
+      </td>
+    </tr>
+    </table>
 
     <script src="js/Chart.js"></script>
     <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="http://heartcode-canvasloader.googlecode.com/files/heartcode-canvasloader-min-0.9.1.js"></script>
     <script src="js/RestAPI.js"></script>
     <script src="js/GitChart.js"></script>
   </body>
