@@ -1,2 +1,1 @@
-
-"!https://travis-ci.org/theTechie/chartjs-git.png!":https://travis-ci.org/theTechie/chartjs-git
+[![Build Status](https://travis-ci.org/theTechie/chartjs-git.png)](https://travis-ci.org/theTechie/chartjs-git)
